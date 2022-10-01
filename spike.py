@@ -1640,7 +1640,7 @@ def greater_than(a, b):
     pass
 
 
-class Buttons:
+class Button:
     def __init__(self, location):
         """
         Accesses the PrimeHub buttons
@@ -1912,8 +1912,8 @@ class ColorSensor:
 class PrimeHub:
     speaker = Speaker()
     motion_sensor = MotionSensor()
-    left_button = Buttons("left")
-    right_button = Buttons("right")
+    left_button = Button("left")
+    right_button = Button("right")
     light_matrix = LightMatrix()
     status_light = StatusLight()
     PORT_A = 'A'
