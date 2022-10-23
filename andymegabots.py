@@ -51,19 +51,19 @@ def startMission():
     backMotor.set_degrees_counted(0)
     gyroSensor.reset_yaw_angle()
 
-def gyroNormalize()
+def gyroNormalize():
     if gyroSensor.get_yaw_angle() < 0:
         normalizeAngle = gyroSensor.get_yaw_angle() + 180
     else:
         normalizeAngle = gyroSensor.get_yaw_angle()
     return normalizeAngle
 
-def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed)
-    if leftMotorSpeed > rightMotorSpeed:
-    # Right turn
+# def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed)
+#     if leftMotorSpeed > rightMotorSpeed:
+#     # Right turn
 
-    else:
-    # Left Turn
+#     else:
+#     # Left Turn
 
 
 startMission()
