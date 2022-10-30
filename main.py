@@ -160,6 +160,6 @@ m3Turn(182, 0, 0, -20, 0)
 
 m3Turn(225, 0, 0, 20, 15)
 
-motorPair.move_tank(550, "degrees", 40, 40)
+#motorPair.move_tank(550, "degrees", 40, 40)
 
 showBatteryLevel()
