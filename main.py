@@ -65,13 +65,12 @@ def gyroNormalize():
     return normalizeAngle
 
 def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
-    #startingAngle = gyroNormalize()
-    #finalAngle = targetGyro
+    turn = "right" if leftMotorSpeed > rightMotorSpeed else "left"
+    offsetGyro = offsetGyro if turn == "left" else offsetGyro * -1
     wait_for_seconds(pauseTime)
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
-    wait_until(gyroNormalize, equal_to, targetGyro)
+    wait_until(gyroNormalize, equal_to, targetGyro + offsetGyro)
     motorPair.stop()
-
 
 def showBatteryLevel():
     megaBotsPrime.light_matrix.write(battery.capacity_left())

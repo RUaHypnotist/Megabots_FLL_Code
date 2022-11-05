@@ -51,21 +51,21 @@ def startMission():
     backMotor.set_degrees_counted(0)
     gyroSensor.reset_yaw_angle()
 
-startMission()
+# startMission()
 
-print('LeftMotor: ',leftMotor.get_degrees_counted())
-print('RightMotor: ',rightMotor.get_degrees_counted())
-print('FrontMotor: ',frontMotor.get_degrees_counted())
-print('BackMotor: ',backMotor.get_degrees_counted())
-print('Yaw: ', gyroSensor.get_yaw_angle())
+# print('LeftMotor: ',leftMotor.get_degrees_counted())
+# print('RightMotor: ',rightMotor.get_degrees_counted())
+# print('FrontMotor: ',frontMotor.get_degrees_counted())
+# print('BackMotor: ',backMotor.get_degrees_counted())
+# print('Yaw: ', gyroSensor.get_yaw_angle())
 
-wait_for_seconds(5)
+# wait_for_seconds(5)
 
-print('LeftMotor: ',leftMotor.get_degrees_counted())
-print('RightMotor: ',rightMotor.get_degrees_counted())
-print('FrontMotor: ',frontMotor.get_degrees_counted())
-print('BackMotor: ',backMotor.get_degrees_counted())
-print('Yaw: ', gyroSensor.get_yaw_angle())
+# print('LeftMotor: ',leftMotor.get_degrees_counted())
+# print('RightMotor: ',rightMotor.get_degrees_counted())
+# print('FrontMotor: ',frontMotor.get_degrees_counted())
+# print('BackMotor: ',backMotor.get_degrees_counted())
+# print('Yaw: ', gyroSensor.get_yaw_angle())
 
 # backMotor.set_degrees_counted(0)
 # backMotorBefore = backMotor.get_degrees_counted()
@@ -94,3 +94,4 @@ print('Yaw: ', gyroSensor.get_yaw_angle())
 
 #while True:
 #    megaBotsPrime.light_matrix.write(rightColor.get_rgb_intensity())
+
