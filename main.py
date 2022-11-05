@@ -3,7 +3,7 @@
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, Timer, wait_until
 from spike.operator import *
-import hub
+from hub import battery
 from math import *
 
 #Initialization
@@ -62,14 +62,14 @@ def gyroNormalize():
 def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     #startingAngle = gyroNormalize()
     #finalAngle = targetGyro
+    wait_for_seconds(pauseTime)
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
     wait_until(gyroNormalize, equal_to, targetGyro)
     motorPair.stop()
 
 def showBatteryLevel():
-    megaBotsPrime.light_matrix.write(hub.battery.capacity_left())
+    megaBotsPrime.light_matrix.write(battery.capacity_left())
 
-showBatteryLevel()
 startMission()
 
 #Turn towards hydroelectric dam, 1st turn
@@ -102,22 +102,22 @@ m3Turn(179, 0, 0, 20, 0)
 motorPair.move_tank(200, "degrees", -20, -20)
 
 #Drop the back hook
-backMotor.run_for_degrees(160,70)
+backMotor.run_for_degrees(140,70)
 
 #Pull Smart Grid lever
 motorPair.move_tank(100, "degrees", 10, 10)
 
 #Raise the back hook
-backMotor.run_for_degrees(160,-50)
+backMotor.run_for_degrees(140,-50)
 
 #Move forward to the hydrogen plant
-motorPair.move_tank(150, "degrees", 20, 20)
+motorPair.move_tank(170, "degrees", 20, 20)
 
 #Turn N/NW toward Solar Farm, 5th turn
 m3Turn(335, 0, 0, -10, 10)
 
 #Go towards Solar Farm
-motorPair.move_tank(260, "degrees", 30, 30)
+motorPair.move_tank(270, "degrees", 30, 30)
 
 #Slow curve turn to collect first energy unit, 6th turn
 m3Turn(275, 0, 0, 13, 20)
@@ -152,13 +152,40 @@ motorPair.move_tank(70, "degrees", -15, -15)
 #Turn towards Red Base
 m3Turn(215, 0, 0, 0, 20)
 
+# Move to Red Base to drop of energy
 motorPair.move_tank(500, "degrees", 40, 40)
 
+# Move back towards Hydro Plant
 motorPair.move_tank(600, "degrees", -40, -40)
 
-m3Turn(182, 0, 0, -20, 0)
+# Turn behind Hydro Plant
+m3Turn(172, 0, 0, -20, 0)
 
+# Sweep Past Hydro Plant, dropping water and energy
 m3Turn(225, 0, 0, 20, 15)
+
+# Turn to South
+m3Turn(182, 0, 1, 0, 20)
+
+# Back Up Toward Energy Storage
+motorPair.move_tank(600, "degrees", -40, -40)
+
+#Make sure isn't brushing up on the Energy Storage
+motorPair.move_tank(20, "degrees", 10, 10)
+
+#Drop the back hook
+backMotor.run_for_degrees(160,70)
+
+# Return To Base
+motorPair.move_tank(300, "degrees", 70, 70)
+
+m3Turn(220, 0, 0, 20, 15)
+
+motorPair.move_tank(310, "degrees", 70, 70)
+
+# m3Turn(225, 0, 0, 30, 0)
+
+# motorPair.move_tank(300, "degrees", 50, 50)
 
 #motorPair.move_tank(550, "degrees", 40, 40)
 
