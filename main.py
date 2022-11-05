@@ -50,7 +50,7 @@ def findColor(targetColor, colorSensor, leftMotorSpeed, rightMotorSpeed):
 def startMission():
     # Resets all values for each motor and the gyro sensor.
     megaBotsPrime.right_button.wait_until_pressed()
-    wait_for_seconds(1)
+    wait_for_seconds(0.5)
     leftMotor.set_degrees_counted(0)
     rightMotor.set_degrees_counted(0)
     frontMotor.set_degrees_counted(0)
@@ -88,7 +88,6 @@ motorPair.move_tank(250, "degrees", 30, 30)
 m3Turn(335, 0, 0, -40, 60)
 
 #Turn left toward North, 2nd turn
-#m3Turn(2, 0, 0, 0, 20)
 
 m3Turn(2, 0, 0, 0, -25)
 
@@ -128,9 +127,6 @@ motorPair.move_tank(270, "degrees", 30, 30)
 #Slow curve turn to collect first energy unit, 6th turn
 m3Turn(275, 0, 0, 13, 20)
 
-#Collect last two energy units
-#motorPair.move_tank(50, "degrees", 30, 30)
-
 #Turn to SouthWest, 7th turn
 m3Turn(220, 0, 0, -10, 10)
 
@@ -142,8 +138,6 @@ motorPair.move_tank(160, "degrees", 20, 20)
 
 # Turn to Oil Rig
 m3Turn(263, 0, 0, 10, -10)
-
-#First raise of Oil Platform lever
 
 # Pump the Oil Station 3 Times
 for i in range(3):
@@ -176,7 +170,7 @@ m3Turn(172, 0, 0, -20, 0)
 m3Turn(225, 0, 0, 20, 15)
 
 # Turn to South
-m3Turn(182, 0, 1, 0, 20)
+m3Turn(182, 0, 0.5, 0, 20)
 
 # Back Up Toward Energy Storage
 motorPair.move_tank(600, "degrees", -40, -40)
@@ -187,17 +181,13 @@ motorPair.move_tank(20, "degrees", 10, 10)
 #Drop the back hook
 backMotor.run_for_degrees(150,70)
 
-# Return To Base
+# Start South Toward Base
 motorPair.move_tank(300, "degrees", 70, 70)
 
+# Turn SouthWest Toward Base
 m3Turn(220, 0, 0, 40, 30)
 
+# Return To Base
 motorPair.move_tank(310, "degrees", 70, 70)
-
-# m3Turn(225, 0, 0, 30, 0)
-
-# motorPair.move_tank(300, "degrees", 50, 50)
-
-#motorPair.move_tank(550, "degrees", 40, 40)
 
 showBatteryLevel()
