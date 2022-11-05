@@ -34,6 +34,11 @@ colorThreshold = 3
 blackThreshold = blackColor + colorThreshold
 whiteThreshold = whiteColor - colorThreshold
 
+# Braking Values
+defaultStopAction='brake'
+motorPair.set_stop_action(defaultStopAction)
+
+
 # Re-Usable Functions
 def findColor(targetColor, colorSensor, leftMotorSpeed, rightMotorSpeed):
     # With the specified color sensor, it finds the specified color moving
@@ -66,6 +71,7 @@ def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
     wait_until(gyroNormalize, equal_to, targetGyro)
     motorPair.stop()
+
 
 def showBatteryLevel():
     megaBotsPrime.light_matrix.write(battery.capacity_left())
@@ -131,23 +137,28 @@ m3Turn(220, 0, 0, -10, 10)
 #Find the black line to line up with oil rig lever
 findColor(blackThreshold, rightColor, 20, 20)
 
-#
+# Move Southwest toward the Oil Rig
 motorPair.move_tank(160, "degrees", 20, 20)
 
+# Turn to Oil Rig
 m3Turn(263, 0, 0, 10, -10)
 
 #First raise of Oil Platform lever
-motorPair.move_tank(100, "degrees", 15, 15)
 
-motorPair.move_tank(80, "degrees", -15, -15)
-
-motorPair.move_tank(80, "degrees", 15, 15)
-
-motorPair.move_tank(80, "degrees", -15, -15)
-
-motorPair.move_tank(80, "degrees", 15, 15)
-
-motorPair.move_tank(70, "degrees", -15, -15)
+# Pump the Oil Station 3 Times
+for i in range(3):
+    oilRigSpeed=15
+    oilRigDistance=80
+    adjust=20 if i==0 else 0
+    adjustedOilRigDistance=oilRigDistance+adjust
+#    print("Run A ", str(i), " adjustDistance ", adjustedOilRigDistance)
+    motorPair.move_tank(adjustedOilRigDistance, "degrees", oilRigSpeed, oilRigSpeed)
+    motorPair.set_stop_action('coast')
+    adjust=-10 if i==2 else 0
+    adjustedOilRigDistance=oilRigDistance+adjust
+#    print("Run B ", str(i), " adjustDistance ", adjustedOilRigDistance)
+    motorPair.move_tank(adjustedOilRigDistance, "degrees", oilRigSpeed * -1, oilRigSpeed * -1)
+    motorPair.set_stop_action(defaultStopAction)
 
 #Turn towards Red Base
 m3Turn(215, 0, 0, 0, 20)
@@ -174,12 +185,12 @@ motorPair.move_tank(600, "degrees", -40, -40)
 motorPair.move_tank(20, "degrees", 10, 10)
 
 #Drop the back hook
-backMotor.run_for_degrees(160,70)
+backMotor.run_for_degrees(150,70)
 
 # Return To Base
 motorPair.move_tank(300, "degrees", 70, 70)
 
-m3Turn(220, 0, 0, 20, 15)
+m3Turn(220, 0, 0, 40, 30)
 
 motorPair.move_tank(310, "degrees", 70, 70)
 
