@@ -1,4 +1,4 @@
-# LEGO type:standard slot:1 autostart
+# LEGO type:standard slot:2 autostart
 
 from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, Timer, wait_until
@@ -71,7 +71,7 @@ def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     offsetGyro = offsetGyro if turn == "left" else offsetGyro * -1
     wait_for_seconds(pauseTime)
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
-    wait_until(gyroNormalize, equal_to, targetGyro + offsetGyro)
+    wait_until(gyroNormalize, equal_to, (targetGyro + offsetGyro))
     motorPair.stop()
 
 def showBatteryLevel():
@@ -85,118 +85,76 @@ def gyroStraight(distance, motorSpeed, multiplier, referenceMotor):
         motorPair.start_tank(int((motorSpeed - yawOffset * multiplier)), int((motorSpeed + yawOffset * multiplier)))
     motorPair.stop()
 
+# def lineFollow(distance, motorSpeed, multiplier, targetReflectedLight, referenceMotor, referenceColorSensor):
+#     referenceMotor.set_degrees_counted(0)
+#     while referenceMotor.get_degrees_counted() < distance:
+#         print("distance: ", referenceMotor.get_degrees_counted())
+#         colorOffset = int((targetReflectedLight - referenceColorSensor.get_reflected_light())*multiplier)
+#         print("colorOffset: ", colorOffset)
+#         motorPair.start_tank((motorSpeed - colorOffset), (motorSpeed + colorOffset))
+#     motorPair.stop()
+
 startMission()
 
-#Turn towards hydroelectric dam, 1st turn
-m3Turn(40, 0, 0, 20, 0)
-
-#Move towards dam
-motorPair.move_tank(250, "degrees", 30, 30)
-
-# Flick the water unit
-motorPair.move_tank(150, "degrees", -40, 60)
-
-#Move forward to clear Hydroplant
-motorPair.move_tank(20, "degrees", 20, 20)
-
-#Turn left toward North, 2nd turn
-m3Turn(0, 0, 0, 0, -25)
-
-findColor(blackThreshold, rightColor, 25, 25)
-
-#Turn East, 3rd turn
-m3Turn(90, 0, 0, 20, 0)
-
+#Leave base until right color sensor hits black line
 findColor(blackThreshold, rightColor, 30, 30)
 
-motorPair.move_tank(50, "degrees", 30, 30)
+#Turn to Northeast to avoid oil platform
+m3Turn(20, 0, 0, 20, 0)
 
-#Turn South, 4th turn
-m3Turn(179, 0, 0, 20, 0)
+#Travel Northeast until left color sensor finds black
+findColor(blackThreshold, leftColor, 30, 30)
 
-#Move back towards Smart Grid
-motorPair.move_tank(200, "degrees", -20, -20)
+#Face North and energy storage
+m3Turn(4, 0, 0, 0, 15)
 
-#Drop the back hook
-backMotor.run_for_degrees(140,70)
+#Go forward, against energy storage
+motorPair.move_tank(280, "degrees", 20, 20)
 
-#Pull Smart Grid lever
-motorPair.move_tank(90, "degrees", 10, 10)
+#Release energy units
+frontMotor.run_for_degrees(100, 50)
 
-#Raise the back hook
-backMotor.run_for_degrees(140,-50)
+#Back up from energy storage until right color sensor hits black line
+findColor(blackThreshold, rightColor, -30, -30)
 
-#Move forward to the hydrogen plant
-motorPair.move_tank(170, "degrees", 20, 20)
+#Back up from black line to avoid hitting the oil platform while turning
+motorPair.move_tank(200, "degrees", -30, -30)
 
-#Turn N/NW toward Solar Farm, 5th turn
-m3Turn(335, 0, 0, -15, 15)
+#Turn Northeast
+m3Turn(45, 0, 0, 25, 0)
 
-#Go towards Solar Farm
-motorPair.move_tank(270, "degrees", 30, 30)
+#Find the next black line
+findColor(blackThreshold, leftColor, 30, 30)
 
-#Slow curve turn to collect first energy unit, 6th turn
-m3Turn(275, 0, 0, 13, 20)
+#Turn east
+m3Turn(84, 0, 0, 30, 0)
 
-#Turn to SouthWest, 7th turn
-m3Turn(220, 0, 0, -10, 10)
+#Go foward until right color sensor hits the black line 
+findColor(blackColor, rightColor, 40, 40)
 
-#Find the black line to line up with oil rig lever
-findColor(blackThreshold, rightColor, 20, 20)
+#Move past line
+motorPair.move_tank(200, "degrees", 20, 20)
 
-# Move Southwest toward the Oil Rig
-motorPair.move_tank(160, "degrees", 20, 20)
+#Turn so back faces the power plant
+m3Turn(1, 0, 0, -20, 0)
 
-# Turn to Oil Rig
-m3Turn(263, 0, 0, 10, -10)
+#Back up to power plant
+# motorPair.move_tank(600, "degrees", -30, -30)
+gyroStraight(600,-30,1.1,leftMotor)
 
-# Pump the Oil Station 3 Times
-for i in range(3):
-    oilRigSpeed=15
-    oilRigDistance=80
-    adjust=20 if i==0 else 0
-    adjustedOilRigDistance=oilRigDistance+adjust
-    motorPair.move_tank(adjustedOilRigDistance, "degrees", oilRigSpeed, oilRigSpeed)
-    motorPair.set_stop_action('coast')
-    adjust=-10 if i==2 else 0
-    adjustedOilRigDistance=oilRigDistance+adjust
-    motorPair.move_tank(adjustedOilRigDistance, "degrees", oilRigSpeed * -1, oilRigSpeed * -1)
-    motorPair.set_stop_action(defaultStopAction)
+#Approach power plant
+motorPair.move_tank(80, "degrees", -10, -10)
 
-#Turn towards Red Base
-m3Turn(215, 0, 0, 0, 20)
+#Go foward to hydrogen plant
+motorPair.move_tank(200, "degrees", 20, 20)
 
-# Move to Red Base to drop of energy
-motorPair.move_tank(500, "degrees", 40, 40)
+#Quick turn to drop off innovation module
+motorPair.move_tank(60, "degrees", 60, -60)
 
-# Move back towards Hydro Plant
-motorPair.move_tank(600, "degrees", -40, -40)
+#Turn to blue base
+m3Turn(110, 0, 0, 10, -10)
 
-# Turn behind Hydro Plant
-m3Turn(172, 0, 0, -20, 0)
-
-# Sweep Past Hydro Plant, dropping water and energy
-m3Turn(225, 0, 0, 20, 15)
-
-# Turn to South
-m3Turn(182, 0, 0.5, 0, 20)
-
-# Back Up Toward Energy Storage
-motorPair.move_tank(600, "degrees", -40, -40)
-
-#Make sure isn't brushing up on the Energy Storage
-motorPair.move_tank(20, "degrees", 10, 10)
-
-#Drop the back hook
-backMotor.run_for_degrees(150,70)
-
-# Start South Toward Base
-motorPair.move_tank(300, "degrees", 70, 70)
-
-# Turn SouthWest Toward Base
-m3Turn(230, 0, 0, 40, 30)
-
-# Return To Base
-motorPair.move_tank(310, "degrees", 90, 90)
+#Go back to blue base
+motorPair.move_tank(1300, "degrees", 70, 72)
 
 SystemExit
