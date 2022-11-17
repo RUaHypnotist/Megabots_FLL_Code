@@ -49,8 +49,10 @@ def findColor(targetColor, colorSensor, leftMotorSpeed, rightMotorSpeed):
 
 def startMission():
     # Resets all values for each motor and the gyro sensor.
+    megaBotsPrime.light_matrix.show_image('SQUARE')
     megaBotsPrime.right_button.wait_until_pressed()
-    wait_for_seconds(0.5)
+    megaBotsPrime.light_matrix.off()
+    wait_for_seconds(0.2)
     leftMotor.set_degrees_counted(0)
     rightMotor.set_degrees_counted(0)
     frontMotor.set_degrees_counted(0)
