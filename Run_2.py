@@ -96,7 +96,7 @@ findColor(blackThreshold, leftColor, 30, 30)
 m3Turn(4, 0, 0, 0, 15)
 
 #Go forward, against energy storage
-motorPair.move_tank(2, "seconds", 20, 20)
+motorPair.move_tank(1.5, "seconds", 30, 30)
 
 #Release energy units
 frontMotor.run_for_degrees(100, 50)
@@ -126,11 +126,20 @@ motorPair.move_tank(200, "degrees", 15, 15)
 m3Turn(1, 0, 0, -20, 0)
 
 #Back up to power plant
-# motorPair.move_tank(600, "degrees", -30, -30)
-gyroStraight(600,-30,1.1,leftMotor)
+gyroStraight(550,-40,1.6,leftMotor)
+
+if gyroSensor.get_yaw_angle() > 2:
+    print("Turn Left")
+    print(gyroSensor.get_yaw_angle())
+    m3Turn(0,0,0,0,5)
+
+elif gyroSensor.get_yaw_angle() < -2:
+    print("Turn Right")
+    print(gyroSensor.get_yaw_angle())
+    m3Turn(0,0,0,5,0)
 
 #Approach power plant
-motorPair.move_tank(1.2, "seconds", -10, -10)
+motorPair.move_tank(1.5, "seconds", -15, -15)
 
 #Go foward to hydrogen plant
 motorPair.move_tank(200, "degrees", 20, 20)
@@ -142,6 +151,6 @@ motorPair.move_tank(60, "degrees", 60, -60)
 m3Turn(110, 0, 0, 10, -10)
 
 #Go back to blue base
-motorPair.move_tank(1300, "degrees", 70, 72)
+motorPair.move_tank(1300, "degrees", 70, 73)
 
 SystemExit
