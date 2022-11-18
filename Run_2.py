@@ -1,9 +1,8 @@
 # LEGO type:standard slot:2 autostart
 
-from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+from spike import PrimeHub, ColorSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, Timer, wait_until
 from spike.operator import *
-from hub import battery
 from math import *
 
 #Initialization
@@ -74,9 +73,6 @@ def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     wait_until(gyroNormalize, equal_to, (targetGyro + offsetGyro))
     motorPair.stop()
 
-def showBatteryLevel():
-    megaBotsPrime.light_matrix.write(battery.capacity_left())
-
 def gyroStraight(distance, motorSpeed, multiplier, referenceMotor):
     beginYaw = gyroSensor.get_yaw_angle()
     referenceMotor.set_degrees_counted(0)
@@ -84,15 +80,6 @@ def gyroStraight(distance, motorSpeed, multiplier, referenceMotor):
         yawOffset = gyroSensor.get_yaw_angle() - beginYaw
         motorPair.start_tank(int((motorSpeed - yawOffset * multiplier)), int((motorSpeed + yawOffset * multiplier)))
     motorPair.stop()
-
-# def lineFollow(distance, motorSpeed, multiplier, targetReflectedLight, referenceMotor, referenceColorSensor):
-#     referenceMotor.set_degrees_counted(0)
-#     while referenceMotor.get_degrees_counted() < distance:
-#         print("distance: ", referenceMotor.get_degrees_counted())
-#         colorOffset = int((targetReflectedLight - referenceColorSensor.get_reflected_light())*multiplier)
-#         print("colorOffset: ", colorOffset)
-#         motorPair.start_tank((motorSpeed - colorOffset), (motorSpeed + colorOffset))
-#     motorPair.stop()
 
 startMission()
 
@@ -109,7 +96,7 @@ findColor(blackThreshold, leftColor, 30, 30)
 m3Turn(4, 0, 0, 0, 15)
 
 #Go forward, against energy storage
-motorPair.move_tank(280, "degrees", 20, 20)
+motorPair.move_tank(2, "seconds", 20, 20)
 
 #Release energy units
 frontMotor.run_for_degrees(100, 50)
@@ -127,13 +114,13 @@ m3Turn(45, 0, 0, 25, 0)
 findColor(blackThreshold, leftColor, 30, 30)
 
 #Turn east
-m3Turn(84, 0, 0, 30, 0)
+m3Turn(84, 0, 0, 20, 0)
 
 #Go foward until right color sensor hits the black line 
-findColor(blackColor, rightColor, 40, 40)
+findColor(blackColor, rightColor, 35, 35)
 
 #Move past line
-motorPair.move_tank(200, "degrees", 20, 20)
+motorPair.move_tank(200, "degrees", 15, 15)
 
 #Turn so back faces the power plant
 m3Turn(1, 0, 0, -20, 0)
@@ -143,7 +130,7 @@ m3Turn(1, 0, 0, -20, 0)
 gyroStraight(600,-30,1.1,leftMotor)
 
 #Approach power plant
-motorPair.move_tank(80, "degrees", -10, -10)
+motorPair.move_tank(1.2, "seconds", -10, -10)
 
 #Go foward to hydrogen plant
 motorPair.move_tank(200, "degrees", 20, 20)

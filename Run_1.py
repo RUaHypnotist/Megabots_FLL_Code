@@ -1,6 +1,6 @@
 # LEGO type:standard slot:1 autostart
 
-from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+from spike import PrimeHub, ColorSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, Timer, wait_until
 from spike.operator import *
 from hub import battery
@@ -9,7 +9,6 @@ from math import *
 #Initialization
 megaBotsPrime = PrimeHub()
 
-# Positive is down for attachment 1, first run, backMotor.
 # Motor and Sensor Definitions
 gyroSensor = megaBotsPrime.motion_sensor
 leftMotorPort = 'A'
@@ -18,6 +17,7 @@ rightMotorPort = 'E'
 rightMotor = Motor(rightMotorPort)
 motorPair = MotorPair(leftMotorPort, rightMotorPort)
 
+# Positive is down for attachment 1, first run, backMotor.
 frontMotorPort = 'D'
 frontMotor = Motor(frontMotorPort)
 backMotorPort = 'C'
@@ -102,16 +102,19 @@ motorPair.move_tank(20, "degrees", 20, 20)
 #Turn left toward North, 2nd turn
 m3Turn(0, 0, 0, 0, -25)
 
+#Go forward until we hit the line in front of the solar farm (east/west line)
 findColor(blackThreshold, rightColor, 25, 25)
 
 #Turn East, 3rd turn
 m3Turn(90, 0, 0, 20, 0)
 
+#Go foward until hit the North/South line in front of the Smart Grid
 findColor(blackThreshold, rightColor, 30, 30)
 
+#Go foward to clear the line
 motorPair.move_tank(50, "degrees", 30, 30)
 
-#Turn South, 4th turn
+#Turn South, 4th turn, back facing the Smart Grid
 m3Turn(179, 0, 0, 20, 0)
 
 #Move back towards Smart Grid
@@ -121,7 +124,7 @@ motorPair.move_tank(200, "degrees", -20, -20)
 backMotor.run_for_degrees(140,70)
 
 #Pull Smart Grid lever
-motorPair.move_tank(90, "degrees", 10, 10)
+motorPair.move_tank(1.2, "seconds", 10, 10)
 
 #Raise the back hook
 backMotor.run_for_degrees(140,-50)
@@ -141,26 +144,26 @@ m3Turn(275, 0, 0, 13, 20)
 #Turn to SouthWest, 7th turn
 m3Turn(220, 0, 0, -10, 10)
 
-#Find the black line to line up with oil rig lever
+#Find the black line to line up with Oil Platform lever
 findColor(blackThreshold, rightColor, 20, 20)
 
-# Move Southwest toward the Oil Rig
+# Move Southwest toward the Oil Platform
 motorPair.move_tank(160, "degrees", 20, 20)
 
-# Turn to Oil Rig
+# Turn to Oil Platform
 m3Turn(263, 0, 0, 10, -10)
 
-# Pump the Oil Station 3 Times
+# Pump the Oil Platform 3 Times
 for i in range(3):
-    oilRigSpeed=15
-    oilRigDistance=80
+    oilSpeed=15
+    oilDistance=80
     adjust=20 if i==0 else 0
-    adjustedOilRigDistance=oilRigDistance+adjust
-    motorPair.move_tank(adjustedOilRigDistance, "degrees", oilRigSpeed, oilRigSpeed)
+    adjustedOilDistance=oilDistance+adjust
+    motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed, oilSpeed)
     motorPair.set_stop_action('coast')
     adjust=-10 if i==2 else 0
-    adjustedOilRigDistance=oilRigDistance+adjust
-    motorPair.move_tank(adjustedOilRigDistance, "degrees", oilRigSpeed * -1, oilRigSpeed * -1)
+    adjustedOilDistance=oilDistance+adjust
+    motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed * -1, oilSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)
 
 #Turn towards Red Base
