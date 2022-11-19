@@ -129,13 +129,9 @@ m3Turn(1, 0, 0, -20, 0)
 gyroStraight(550,-40,1.6,leftMotor)
 
 if gyroSensor.get_yaw_angle() > 2:
-    print("Turn Left")
-    print(gyroSensor.get_yaw_angle())
     m3Turn(0,0,0,0,5)
 
 elif gyroSensor.get_yaw_angle() < -2:
-    print("Turn Right")
-    print(gyroSensor.get_yaw_angle())
     m3Turn(0,0,0,5,0)
 
 #Approach power plant

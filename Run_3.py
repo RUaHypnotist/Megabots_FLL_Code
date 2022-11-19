@@ -1,15 +1,13 @@
 # LEGO type:standard slot:8 autostart
 
-from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+from spike import PrimeHub, ColorSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, Timer, wait_until
 from spike.operator import *
-from hub import battery
 from math import *
 
 #Initialization
 megaBotsPrime = PrimeHub()
 
-# Positive is down for attachment 1, first run, backMotor.
 # Motor and Sensor Definitions
 gyroSensor = megaBotsPrime.motion_sensor
 leftMotorPort = 'A'
@@ -37,7 +35,6 @@ whiteThreshold = whiteColor - colorThreshold
 # Braking Values
 defaultStopAction='brake'
 motorPair.set_stop_action(defaultStopAction)
-
 
 # Re-Usable Functions
 def findColor(targetColor, colorSensor, leftMotorSpeed, rightMotorSpeed):
@@ -73,9 +70,6 @@ def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
     wait_until(gyroNormalize, equal_to, targetGyro + offsetGyro)
     motorPair.stop()
-
-def showBatteryLevel():
-    megaBotsPrime.light_matrix.write(battery.capacity_left())
 
 def gyroStraight(distance, motorSpeed, multiplier, referenceMotor):
     beginYaw = gyroSensor.get_yaw_angle()
