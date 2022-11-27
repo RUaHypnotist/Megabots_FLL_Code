@@ -108,7 +108,7 @@ motorPair.move_tank(200, "degrees", -40, 60)
 m3Turn(50, 0, 0, 10, -10)
 
 #Back up to Toy Factory
-motorPair.move_tank(180, "degrees", -15, -15)
+motorPair.move_tank(1.5, "seconds", -15, -15)
 
 #Release energy units
 backMotor.run_for_degrees(100, -50)
