@@ -116,8 +116,8 @@ findColor(blackThreshold, leftColor, 30, 30)
 #Turn east
 m3Turn(84, 0, 0, 20, 0)
 
-#Go foward until right color sensor hits the black line 
-findColor(blackColor, rightColor, 35, 35)
+#Go forward until right color sensor hits the black line 
+findColor(blackThreshold, rightColor, 35, 35)
 
 #Move past line
 motorPair.move_tank(200, "degrees", 15, 15)
