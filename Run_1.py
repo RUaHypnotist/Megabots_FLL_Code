@@ -96,7 +96,7 @@ motorPair.move_tank(250, "degrees", 30, 30)
 # Flick the water unit
 motorPair.move_tank(150, "degrees", -40, 60)
 
-#Move forward to clear Hydroplant
+#Move forward to clear hydroelectric dam
 motorPair.move_tank(20, "degrees", 20, 20)
 
 #Turn left toward North, 2nd turn
@@ -124,13 +124,16 @@ motorPair.move_tank(200, "degrees", -20, -20)
 backMotor.run_for_degrees(140,70)
 
 #Pull Smart Grid lever
-motorPair.move_tank(1.2, "seconds", 10, 10)
+motorPair.move_tank(1, "seconds", 10, 10)
+
+#Slight Backup to free the hook
+motorPair.move_tank(5, "degrees", -5, -5)
 
 #Raise the back hook
 backMotor.run_for_degrees(140,-50)
 
 #Move forward to the hydrogen plant
-motorPair.move_tank(170, "degrees", 20, 20)
+motorPair.move_tank(180, "degrees", 30, 30)
 
 #Turn N/NW toward Solar Farm, 5th turn
 m3Turn(335, 0, 0, -15, 15)
@@ -151,18 +154,21 @@ findColor(blackThreshold, rightColor, 20, 20)
 motorPair.move_tank(160, "degrees", 20, 20)
 
 # Turn to Oil Platform
-m3Turn(263, 0, 0, 10, -10)
+m3Turn(261, 0, 0, 10, -10)
 
 # Pump the Oil Platform 3 Times
+rightMotor.set_degrees_counted(0)
 for i in range(3):
     oilSpeed=15
     oilDistance=80
-    adjust=20 if i==0 else 0
-    adjustedOilDistance=oilDistance+adjust
+    startAdjust=20 if i==0 else 0
+    adjustedOilDistance=oilDistance+startAdjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed, oilSpeed)
     motorPair.set_stop_action('coast')
-    adjust=-10 if i==2 else 0
+    adjust= (rightMotor.get_degrees_counted() - oilDistance - startAdjust - 20) if i==2 else 0
     adjustedOilDistance=oilDistance+adjust
+    print("Adjust: ", adjust)
+    print("Total Distance: ", adjustedOilDistance)
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed * -1, oilSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)
 
@@ -172,20 +178,23 @@ m3Turn(215, 0, 0, 0, 20)
 # Move to Red Base to drop of energy
 motorPair.move_tank(500, "degrees", 40, 40)
 
-# Move back towards Hydro Plant
+# Move back towards Hydroelectric dam
 motorPair.move_tank(600, "degrees", -40, -40)
 
-# Turn behind Hydro Plant
-m3Turn(172, 0, 0, -20, 0)
+# Turn behind Hydroelectric dam
+m3Turn(165, 0, 0, -20, 0)
 
-# Sweep Past Hydro Plant, dropping water and energy
-m3Turn(225, 0, 0, 20, 15)
+# Sweep Past Hydroelectric dam, dropping water and energy 
+m3Turn(225, 0, 0, 20, 12)
+
+#Go forward
+motorPair.move_tank(150, "degrees", 30, 30)
 
 # Turn to South
 m3Turn(182, 0, 0.5, 0, 20)
 
 # Back Up Toward Energy Storage
-motorPair.move_tank(600, "degrees", -40, -40)
+motorPair.move_tank(1.5 , "seconds", -40, -40)
 
 #Make sure isn't brushing up on the Energy Storage
 motorPair.move_tank(20, "degrees", 10, 10)
