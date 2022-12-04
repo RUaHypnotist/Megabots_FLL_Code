@@ -116,37 +116,70 @@ findColor(blackThreshold, leftColor, 30, 30)
 #Turn east
 m3Turn(84, 0, 0, 20, 0)
 
+#Move parallel to water
+motorPair.move_tank(200, "degrees", 20, 22)
+
+#Release water units
+backMotor.run_for_seconds(2.0 , -75)
+
 #Go forward until right color sensor hits the black line 
 findColor(blackThreshold, rightColor, 35, 35)
 
 #Move past line
-motorPair.move_tank(200, "degrees", 15, 15)
+motorPair.move_tank(200, "degrees", 25, 25)
 
 #Turn so back faces the power plant
-m3Turn(1, 0, 0, -20, 0)
+m3Turn(0, 0, 0, -15, 0)
 
 #Back up to power plant
-gyroStraight(550,-40,1.6,leftMotor)
+gyroStraight(500, -40, 1.5, leftMotor)
 
+print(gyroSensor.get_yaw_angle())
+
+#Correct approach to power plant
+#Adjust for tilted right
 if gyroSensor.get_yaw_angle() > 2:
-    m3Turn(0,0,0,0,5)
+    m3Turn(359, 0, 0, 0, 5)
+    rightMotor.set_degrees_counted(0)
+    motorPair.move_tank(1.6 , "seconds", -15, -15)
 
+#Adjust for tilt left
 elif gyroSensor.get_yaw_angle() < -2:
-    m3Turn(0,0,0,5,0)
+    m3Turn(357, 0, 0, 3, 0)
+    rightMotor.set_degrees_counted(0)
+    motorPair.move_tank(1.6, "seconds", -11, -15)
 
-#Approach power plant
-motorPair.move_tank(1.5, "seconds", -15, -15)
+#Adjust for slight tilt left
+elif gyroSensor.get_yaw_angle() < 0:
+    rightMotor.set_degrees_counted(0)
+    motorPair.move_tank(1.6, "seconds", -13, -15)
 
-#Go foward to hydrogen plant
-motorPair.move_tank(200, "degrees", 20, 20)
+#Adjust for extreme tilt left
+elif gyroSensor.get_yaw_angle() < -4:
+    rightMotor.set_degrees_counted(0)
+    motorPair.move_tank(1.6, "seconds", -11, -15)
+
+#No adjust if perfect
+else:
+    rightMotor.set_degrees_counted(0)
+    motorPair.move_tank(1.6, "seconds", -15, -15)
+
+#Using distance traveled, create variable for adjust
+hydrogenReturnDistance=60 + abs(rightMotor.get_degrees_counted())
+
+#Turn to clear power plant
+m3Turn(340, 0, 0, 0, 10)
+
+# Go foward to hydrogen plant using adjusted variable
+motorPair.move_tank(hydrogenReturnDistance, "degrees", 33, 30)
 
 #Quick turn to drop off innovation module
-motorPair.move_tank(60, "degrees", 60, -60)
+motorPair.move_tank(60, "degrees", 75, -75)
 
 #Turn to blue base
 m3Turn(110, 0, 0, 10, -10)
 
 #Go back to blue base
-motorPair.move_tank(1300, "degrees", 70, 73)
+motorPair.move_tank(1300, "degrees", 70, 74)
 
 SystemExit
