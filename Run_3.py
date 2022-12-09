@@ -87,10 +87,7 @@ motorPair.move_tank(200, "degrees", 40, 40)
 motorPair.set_stop_action(defaultStopAction)
 
 #Slowly push Television in
-motorPair.move_tank(100, "degrees", 10, 10)
-
-#Push Television upright
-motorPair.move_tank(30, "degrees", 10, 10)
+motorPair.move_tank(1.3, "seconds", 14, 14)
 
 #Back up
 motorPair.move_tank(300, "degrees", -30, -30)
@@ -99,22 +96,22 @@ motorPair.move_tank(300, "degrees", -30, -30)
 m3Turn(135, 0, 0, 15, -15)
 
 #Back up to beside Toy Factory
-motorPair.move_tank(750, "degrees", -40, -40)
+motorPair.move_tank(750, "degrees", -45, -45)
 
 #Flick Rechargeable Battery
 motorPair.move_tank(200, "degrees", -40, 60)
 
 #Double wheel turn to face wind turbine, back facing toy factory
-m3Turn(50, 0, 0, 10, -10)
+m3Turn(50, 0, 0, 15, -15)
 
 #Back up to Toy Factory
-motorPair.move_tank(1.5, "seconds", -15, -15)
+motorPair.move_tank(1.6, "seconds", -15, -15)
 
 #Release energy units
 backMotor.run_for_degrees(100, -50)
 
 #Adjust angle to face Wind Turbine
-m3Turn(45, 0, 0, 0, 10)
+m3Turn(45 , 0, 0, 0, 12)
 
 #Go to Wind Turbine
 findColor(blackThreshold, leftColor, 20, 20)
@@ -123,19 +120,26 @@ findColor(blackThreshold, leftColor, 20, 20)
 for i in range(3):
     windTurbineSpeed=25
     windTurbineDistance=80
-    adjust=-20 if i==0 else 0
+    adjust=-30 if i==0 else 0
     adjustedWindTurbineDistance=windTurbineDistance+adjust
     motorPair.move_tank(adjustedWindTurbineDistance, "degrees", windTurbineSpeed, windTurbineSpeed)
     motorPair.set_stop_action('coast')
-    adjust=150 if i==2 else 0
+    adjust=140 if i==2 else 0
     adjustedWindTurbineDistance=windTurbineDistance+adjust
     motorPair.move_tank(adjustedWindTurbineDistance, "degrees", windTurbineSpeed * -1, windTurbineSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)
 
 #Turn to face Toy Factory
-m3Turn(225, 0, 0, -10, 10)
+m3Turn(225, 0, 0, -12, 12)
 
 #Turn so back faces blue base, leave energy units in rechargeable battery station
-m3Turn(330, 0, 0, 10, -10)
+m3Turn(330, 0, 0, 20, -20)
+
+#Go back to blue base
+motorPair.move_tank(1100, "degrees", -90, -80)
+
+startMission()
+
+gyroStraight(2360, 90, 1.3, rightMotor)
 
 SystemExit
