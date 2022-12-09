@@ -120,7 +120,7 @@ m3Turn(84, 0, 0, 20, 0)
 motorPair.move_tank(200, "degrees", 20, 22)
 
 #Release water units
-backMotor.run_for_seconds(2.0 , -75)
+backMotor.run_for_seconds(1.8 , -95 )
 
 #Go forward until right color sensor hits the black line 
 findColor(blackThreshold, rightColor, 35, 35)
@@ -133,8 +133,6 @@ m3Turn(0, 0, 0, -15, 0)
 
 #Back up to power plant
 gyroStraight(500, -40, 1.5, leftMotor)
-
-print(gyroSensor.get_yaw_angle())
 
 #Correct approach to power plant
 #Adjust for tilted right
@@ -165,7 +163,7 @@ else:
     motorPair.move_tank(1.6, "seconds", -15, -15)
 
 #Using distance traveled, create variable for adjust
-hydrogenReturnDistance=60 + abs(rightMotor.get_degrees_counted())
+hydrogenReturnDistance = 60 + abs(rightMotor.get_degrees_counted())
 
 #Turn to clear power plant
 m3Turn(340, 0, 0, 0, 10)

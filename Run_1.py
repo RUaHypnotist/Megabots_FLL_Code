@@ -106,19 +106,19 @@ m3Turn(0, 0, 0, 0, -25)
 findColor(blackThreshold, rightColor, 25, 25)
 
 #Turn East, 3rd turn
-m3Turn(90, 0, 0, 20, 0)
+m3Turn(92, 0, 0, 20, 0)
 
-#Go foward until hit the North/South line in front of the Smart Grid
+#Go forward until hit the North/South line in front of the Smart Grid
 findColor(blackThreshold, rightColor, 30, 30)
 
-#Go foward to clear the line
+#Go forward to clear the line
 motorPair.move_tank(50, "degrees", 30, 30)
 
 #Turn South, 4th turn, back facing the Smart Grid
 m3Turn(179, 0, 0, 20, 0)
 
 #Move back towards Smart Grid
-motorPair.move_tank(200, "degrees", -20, -20)
+motorPair.move_tank(220 , "degrees", -20, -20)
 
 #Drop the back hook
 backMotor.run_for_degrees(140,70)
@@ -167,8 +167,6 @@ for i in range(3):
     motorPair.set_stop_action('coast')
     adjust= (rightMotor.get_degrees_counted() - oilDistance - startAdjust - 20) if i==2 else 0
     adjustedOilDistance=oilDistance+adjust
-    print("Adjust: ", adjust)
-    print("Total Distance: ", adjustedOilDistance)
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed * -1, oilSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)
 
