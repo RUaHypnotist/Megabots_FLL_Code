@@ -156,16 +156,19 @@ motorPair.move_tank(160, "degrees", 20, 20)
 # Turn to Oil Platform
 m3Turn(261, 0, 0, 10, -10)
 
+# Find Black Line in front of Oil Platform
+findColor(blackThreshold, leftColor, 20, 20)
+
 # Pump the Oil Platform 3 Times
 rightMotor.set_degrees_counted(0)
 for i in range(3):
     oilSpeed=15
     oilDistance=80
-    startAdjust=20 if i==0 else 0
+    startAdjust=-40 if i==0 else 0
     adjustedOilDistance=oilDistance+startAdjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed, oilSpeed)
     motorPair.set_stop_action('coast')
-    adjust= (rightMotor.get_degrees_counted() - oilDistance - startAdjust - 20) if i==2 else 0
+    adjust=0 if i==2 else 0
     adjustedOilDistance=oilDistance+adjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed * -1, oilSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)

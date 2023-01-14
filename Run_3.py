@@ -99,7 +99,7 @@ m3Turn(135, 0, 0, 15, -15)
 motorPair.move_tank(750, "degrees", -45, -45)
 
 #Flick Rechargeable Battery
-motorPair.move_tank(200, "degrees", -40, 60)
+motorPair.move_tank(200, "degrees", -60, 90)
 
 #Double wheel turn to face wind turbine, back facing toy factory
 m3Turn(50, 0, 0, 15, -15)
@@ -114,7 +114,7 @@ backMotor.run_for_degrees(100, -50)
 m3Turn(45 , 0, 0, 0, 12)
 
 #Go to Wind Turbine
-findColor(blackThreshold, leftColor, 20, 20)
+motorPair.move_tank(2.2, "seconds", 20, 20)
 
 #Collect energy units from Wind Turbine
 for i in range(3):
