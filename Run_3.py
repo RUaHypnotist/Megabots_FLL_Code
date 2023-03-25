@@ -110,7 +110,7 @@ m3Turn(135, 0, 0, 15, -15)
 motorPair.move_tank(750, "degrees", -45, -45)
 
 #Flick Rechargeable Battery
-motorPair.move_tank(200, "degrees", -40, 60)
+motorPair.move_tank(200, "degrees", -60, 90)
 
 #Double wheel turn to face wind turbine, back facing toy factory
 m3Turn(50, 0, 0, 15, -15)

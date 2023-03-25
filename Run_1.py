@@ -167,6 +167,9 @@ motorPair.move_tank(220, "degrees", 20, 20)
 # Turn to Oil Platform
 m3Turn(261, 0, 0, 10, -10)
 
+# Find Black Line in front of Oil Platform
+findColor(blackThreshold, leftColor, 20, 20)
+
 # Pump the Oil Platform 3 Times
 rightMotor.set_degrees_counted(0)
 for i in range(3):
