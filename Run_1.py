@@ -5,6 +5,7 @@ from spike.control import wait_for_seconds, Timer, wait_until
 from spike.operator import *
 from hub import battery
 from math import *
+import utime
 
 #Initialization
 megaBotsPrime = PrimeHub()
@@ -52,7 +53,7 @@ def startMission():
     megaBotsPrime.light_matrix.show_image('SQUARE')
     megaBotsPrime.right_button.wait_until_pressed()
     megaBotsPrime.light_matrix.off()
-    wait_for_seconds(0.2)
+    utime.sleep_ms(200)
     leftMotor.set_degrees_counted(0)
     rightMotor.set_degrees_counted(0)
     frontMotor.set_degrees_counted(0)
@@ -69,7 +70,7 @@ def gyroNormalize():
 def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     turn = "right" if leftMotorSpeed > rightMotorSpeed else "left"
     offsetGyro = offsetGyro if turn == "left" else offsetGyro * -1
-    wait_for_seconds(pauseTime)
+    utime.sleep_ms(pauseTime)
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
     wait_until(gyroNormalize, equal_to, targetGyro + offsetGyro)
     motorPair.stop()
@@ -83,6 +84,16 @@ def gyroStraight(distance, motorSpeed, multiplier, referenceMotor):
     while abs(referenceMotor.get_degrees_counted()) < distance:
         yawOffset = gyroSensor.get_yaw_angle() - beginYaw
         motorPair.start_tank(int((motorSpeed - yawOffset * multiplier)), int((motorSpeed + yawOffset * multiplier)))
+    motorPair.stop()
+
+# Moves each motor for a certain amount of miliseconds, and beeps when going backwards.
+def fleep(time_ms, leftMotorSpeed, rightMotorSpeed):
+    start = utime.ticks_ms()
+    motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
+    while utime.ticks_diff(utime.ticks_ms(), start) < time_ms:
+        if leftMotorSpeed <= 0 and rightMotorSpeed <= 0 and time_ms >= 999:
+            megaBotsPrime.speaker.beep(80, 0.7)
+        utime.sleep_ms(300)
     motorPair.stop()
 
 startMission()
@@ -103,13 +114,13 @@ motorPair.move_tank(20, "degrees", 20, 20)
 m3Turn(0, 0, 0, 0, -25)
 
 #Go forward until we hit the line in front of the solar farm (east/west line)
-findColor(blackThreshold, rightColor, 25, 25)
+findColor(blackThreshold, rightColor, 27, 27)
 
 #Turn East, 3rd turn
 m3Turn(92, 0, 0, 20, 0)
 
 #Go forward until hit the North/South line in front of the Smart Grid
-findColor(blackThreshold, rightColor, 30, 30)
+findColor(blackThreshold, rightColor, 35, 35)
 
 #Go forward to clear the line
 motorPair.move_tank(50, "degrees", 30, 30)
@@ -121,16 +132,16 @@ m3Turn(179, 0, 0, 20, 0)
 motorPair.move_tank(220 , "degrees", -20, -20)
 
 #Drop the back hook
-backMotor.run_for_degrees(140,70)
+backMotor.run_for_degrees(140, 70)
 
 #Pull Smart Grid lever
-motorPair.move_tank(60, "degrees", 20, 20)
+fleep(400, 20, 20)
 
 #Slight Backup to free the hook
-motorPair.move_tank(5, "degrees", -5, -5)
+motorPair.move_tank(15, "degrees", -5, -5)
 
 #Raise the back hook
-backMotor.run_for_degrees(140,-50)
+backMotor.run_for_degrees(140, -80)
 
 #Move forward to the hydrogen plant
 motorPair.move_tank(180, "degrees", 30, 30)
@@ -161,11 +172,11 @@ rightMotor.set_degrees_counted(0)
 for i in range(3):
     oilSpeed=15
     oilDistance=80
-    startAdjust=40 if i==0 else 0
+    startAdjust=50 if i==0 else 0
     adjustedOilDistance=oilDistance+startAdjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed, oilSpeed)
     motorPair.set_stop_action('coast')
-    adjust= (rightMotor.get_degrees_counted() - oilDistance - startAdjust - 30) if i==2 else 0
+    adjust= (rightMotor.get_degrees_counted() - oilDistance - startAdjust - 40) if i==2 else 0
     adjustedOilDistance=oilDistance+adjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed * -1, oilSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)
@@ -189,13 +200,13 @@ m3Turn(225, 0, 0, 25, 15)
 motorPair.move_tank(150, "degrees", 30, 30)
 
 # Turn to South
-m3Turn(183, 0, 0.5, 0, 20)
+m3Turn(183, 0, 400, 0, 20)
 
 # Back Up Toward Energy Storage
-motorPair.move_tank(1.5 , "seconds", -50, -50)
+fleep(1000, -50, -50)
 
 #Make sure isn't brushing up on the Energy Storage
-motorPair.move_tank(20, "degrees", 10, 10)
+motorPair.move_tank(5, "degrees", 10, 10)
 
 #Drop the back hook
 backMotor.run_for_degrees(150,70)
