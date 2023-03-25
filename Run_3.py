@@ -4,6 +4,7 @@ from spike import PrimeHub, ColorSensor, Motor, MotorPair
 from spike.control import wait_for_seconds, Timer, wait_until
 from spike.operator import *
 from math import *
+import utime
 
 #Initialization
 megaBotsPrime = PrimeHub()
@@ -49,7 +50,7 @@ def startMission():
     megaBotsPrime.light_matrix.show_image('SQUARE')
     megaBotsPrime.right_button.wait_until_pressed()
     megaBotsPrime.light_matrix.off()
-    wait_for_seconds(0.2)
+    utime.sleep_ms(200)
     leftMotor.set_degrees_counted(0)
     rightMotor.set_degrees_counted(0)
     frontMotor.set_degrees_counted(0)
@@ -66,7 +67,7 @@ def gyroNormalize():
 def m3Turn(targetGyro, offsetGyro, pauseTime, leftMotorSpeed, rightMotorSpeed):
     turn = "right" if leftMotorSpeed > rightMotorSpeed else "left"
     offsetGyro = offsetGyro if turn == "left" else offsetGyro * -1
-    wait_for_seconds(pauseTime)
+    utime.sleep_ms(pauseTime)
     motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
     wait_until(gyroNormalize, equal_to, targetGyro + offsetGyro)
     motorPair.stop()
@@ -79,6 +80,16 @@ def gyroStraight(distance, motorSpeed, multiplier, referenceMotor):
         motorPair.start_tank(int((motorSpeed - yawOffset * multiplier)), int((motorSpeed + yawOffset * multiplier)))
     motorPair.stop()
 
+# Moves each motor for a certain amount of miliseconds, and beeps when going backwards.
+def fleep(time_ms, leftMotorSpeed, rightMotorSpeed):
+    start = utime.ticks_ms()
+    motorPair.start_tank(leftMotorSpeed, rightMotorSpeed)
+    while utime.ticks_diff(utime.ticks_ms(), start) < time_ms:
+        if leftMotorSpeed <= 0 and rightMotorSpeed <= 0 and time_ms >= 999:
+            megaBotsPrime.speaker.beep(80, 0.7)
+        utime.sleep_ms(300)
+    motorPair.stop()
+
 startMission()
 
 #Go forward to approach Television
@@ -87,7 +98,7 @@ motorPair.move_tank(200, "degrees", 40, 40)
 motorPair.set_stop_action(defaultStopAction)
 
 #Slowly push Television in
-motorPair.move_tank(1.3, "seconds", 14, 14)
+fleep(1100, 14, 14)
 
 #Back up
 motorPair.move_tank(300, "degrees", -30, -30)
@@ -105,7 +116,7 @@ motorPair.move_tank(200, "degrees", -60, 90)
 m3Turn(50, 0, 0, 15, -15)
 
 #Back up to Toy Factory
-motorPair.move_tank(1.6, "seconds", -15, -15)
+fleep(1400, -15, -15)
 
 #Release energy units
 backMotor.run_for_degrees(100, -50)
@@ -114,7 +125,7 @@ backMotor.run_for_degrees(100, -50)
 m3Turn(45 , 0, 0, 0, 12)
 
 #Go to Wind Turbine
-motorPair.move_tank(2.2, "seconds", 20, 20)
+fleep(1800, 20, 20)
 
 #Collect energy units from Wind Turbine
 for i in range(3):
