@@ -124,7 +124,7 @@ motorPair.move_tank(220 , "degrees", -20, -20)
 backMotor.run_for_degrees(140,70)
 
 #Pull Smart Grid lever
-motorPair.move_tank(1, "seconds", 10, 10)
+motorPair.move_tank(60, "degrees", 20, 20)
 
 #Slight Backup to free the hook
 motorPair.move_tank(5, "degrees", -5, -5)
@@ -139,7 +139,7 @@ motorPair.move_tank(180, "degrees", 30, 30)
 m3Turn(335, 0, 0, -15, 15)
 
 #Go towards Solar Farm
-motorPair.move_tank(270, "degrees", 30, 30)
+motorPair.move_tank(260, "degrees", 30, 30)
 
 #Slow curve turn to collect first energy unit, 6th turn
 m3Turn(275, 0, 0, 13, 20)
@@ -148,10 +148,10 @@ m3Turn(275, 0, 0, 13, 20)
 m3Turn(220, 0, 0, -10, 10)
 
 #Find the black line to line up with Oil Platform lever
-findColor(blackThreshold, rightColor, 20, 20)
+findColor(blackThreshold, leftColor, 20, 20)
 
 # Move Southwest toward the Oil Platform
-motorPair.move_tank(160, "degrees", 20, 20)
+motorPair.move_tank(220, "degrees", 20, 20)
 
 # Turn to Oil Platform
 m3Turn(261, 0, 0, 10, -10)
@@ -164,11 +164,11 @@ rightMotor.set_degrees_counted(0)
 for i in range(3):
     oilSpeed=15
     oilDistance=80
-    startAdjust=-40 if i==0 else 0
+    startAdjust=40 if i==0 else 0
     adjustedOilDistance=oilDistance+startAdjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed, oilSpeed)
     motorPair.set_stop_action('coast')
-    adjust=0 if i==2 else 0
+    adjust= (rightMotor.get_degrees_counted() - oilDistance - startAdjust - 30) if i==2 else 0
     adjustedOilDistance=oilDistance+adjust
     motorPair.move_tank(adjustedOilDistance, "degrees", oilSpeed * -1, oilSpeed * -1)
     motorPair.set_stop_action(defaultStopAction)
@@ -186,16 +186,16 @@ motorPair.move_tank(600, "degrees", -40, -40)
 m3Turn(165, 0, 0, -20, 0)
 
 # Sweep Past Hydroelectric dam, dropping water and energy 
-m3Turn(225, 0, 0, 20, 12)
+m3Turn(225, 0, 0, 25, 15)
 
 #Go forward
 motorPair.move_tank(150, "degrees", 30, 30)
 
 # Turn to South
-m3Turn(182, 0, 0.5, 0, 20)
+m3Turn(183, 0, 0.5, 0, 20)
 
 # Back Up Toward Energy Storage
-motorPair.move_tank(1.5 , "seconds", -40, -40)
+motorPair.move_tank(1.5 , "seconds", -50, -50)
 
 #Make sure isn't brushing up on the Energy Storage
 motorPair.move_tank(20, "degrees", 10, 10)
@@ -204,7 +204,7 @@ motorPair.move_tank(20, "degrees", 10, 10)
 backMotor.run_for_degrees(150,70)
 
 # Start South Toward Base
-motorPair.move_tank(300, "degrees", 70, 70)
+motorPair.move_tank(300, "degrees", 80, 80)
 
 # Turn SouthWest Toward Base
 m3Turn(230, 0, 0, 40, 30)
